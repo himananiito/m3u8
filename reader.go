@@ -670,6 +670,42 @@ func decodeLineOfMediaPlaylist(p *MediaPlaylist, wv *WV, state *decodingState, l
 		if err == nil {
 			state.tagWV = true
 		}
+
+	case strings.HasPrefix(line, "#EXT-X-START:TIME-OFFSET="):
+		state.listType = MEDIA
+		var v float64
+		if _, err = fmt.Sscanf(line, "#EXT-X-START:TIME-OFFSET=%f", &v); strict && err != nil {
+			return err
+		}
+		p.StartOffset = &v
+	case strings.HasPrefix(line, "#STREAM-DURATION:"):
+		state.listType = MEDIA
+		var v float64
+		if _, err = fmt.Sscanf(line, "#STREAM-DURATION:%f", &v); strict && err != nil {
+			return err
+		}
+		p.StreamDuration = &v
+	case strings.HasPrefix(line, "#CURRENT-POSITION:"):
+		state.listType = MEDIA
+		var v float64
+		if _, err = fmt.Sscanf(line, "#CURRENT-POSITION:%f", &v); strict && err != nil {
+			return err
+		}
+		p.CurrentPosition = &v
+	case strings.HasPrefix(line, "#DMC-STREAM-DURATION:"):
+		state.listType = MEDIA
+		var v float64
+		if _, err = fmt.Sscanf(line, "#DMC-STREAM-DURATION:%f", &v); strict && err != nil {
+			return err
+		}
+		p.DMCStreamDuration = &v
+	case strings.HasPrefix(line, "#DMC-CURRENT-POSITION:"):
+		state.listType = MEDIA
+		var v float64
+		if _, err = fmt.Sscanf(line, "#DMC-CURRENT-POSITION:%f", &v); strict && err != nil {
+			return err
+		}
+		p.DMCCurrentPosition = &v
 	case strings.HasPrefix(line, "#"): // unknown tags treated as comments
 		return err
 	}

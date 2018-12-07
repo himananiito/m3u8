@@ -463,6 +463,31 @@ func (p *MediaPlaylist) Encode() *bytes.Buffer {
 			p.buf.WriteRune('\n')
 		}
 	}
+	if p.StartOffset != nil {
+		p.buf.WriteString("#EXT-X-START:TIME-OFFSET=")
+		p.buf.WriteString(strconv.FormatFloat(*p.StartOffset, 'f', -1, 64))
+		p.buf.WriteRune('\n')
+	}
+	if p.StreamDuration != nil {
+		p.buf.WriteString("#STREAM-DURATION:")
+		p.buf.WriteString(strconv.FormatFloat(*p.StreamDuration, 'f', -1, 64))
+		p.buf.WriteRune('\n')
+	}
+	if p.CurrentPosition != nil {
+		p.buf.WriteString("#CURRENT-POSITION:")
+		p.buf.WriteString(strconv.FormatFloat(*p.CurrentPosition, 'f', -1, 64))
+		p.buf.WriteRune('\n')
+	}
+	if p.StreamDuration != nil {
+		p.buf.WriteString("#DMC-STREAM-DURATION:")
+		p.buf.WriteString(strconv.FormatFloat(*p.DMCStreamDuration, 'f', -1, 64))
+		p.buf.WriteRune('\n')
+	}
+	if p.CurrentPosition != nil {
+		p.buf.WriteString("#DMC-CURRENT-POSITION:")
+		p.buf.WriteString(strconv.FormatFloat(*p.DMCCurrentPosition, 'f', -1, 64))
+		p.buf.WriteRune('\n')
+	}
 
 	var (
 		seg           *MediaSegment
